@@ -493,7 +493,7 @@ document.addEventListener("DOMContentLoaded", () => {
   function shareOnTwitter(activityName, description, schedule) {
     const url = createShareUrl(activityName);
     const text = createShareText(activityName, description, schedule);
-    const twitterUrl = `https://twitter.com/intent/tweet?url=${encodeURIComponent(url)}&text=${encodeURIComponent(text)}`;
+    const twitterUrl = `https://x.com/intent/tweet?url=${encodeURIComponent(url)}&text=${encodeURIComponent(text)}`;
     window.open(twitterUrl, '_blank', 'width=600,height=400');
   }
 
@@ -514,12 +514,40 @@ document.addEventListener("DOMContentLoaded", () => {
 
   function copyShareLink(activityName) {
     const url = createShareUrl(activityName);
-    navigator.clipboard.writeText(url).then(() => {
+    
+    // Try modern clipboard API first
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(url).then(() => {
+        showMessage('Link copied to clipboard!', 'success');
+      }).catch(err => {
+        console.error('Failed to copy link:', err);
+        // Fallback to older method
+        fallbackCopyToClipboard(url);
+      });
+    } else {
+      // Fallback for older browsers or HTTP environments
+      fallbackCopyToClipboard(url);
+    }
+  }
+
+  // Fallback copy method for older browsers
+  function fallbackCopyToClipboard(text) {
+    const textArea = document.createElement('textarea');
+    textArea.value = text;
+    textArea.style.position = 'fixed';
+    textArea.style.left = '-999999px';
+    document.body.appendChild(textArea);
+    textArea.select();
+    
+    try {
+      document.execCommand('copy');
       showMessage('Link copied to clipboard!', 'success');
-    }).catch(err => {
+    } catch (err) {
       console.error('Failed to copy link:', err);
       showMessage('Failed to copy link', 'error');
-    });
+    }
+    
+    document.body.removeChild(textArea);
   }
 
   // Function to render a single activity card
@@ -573,19 +601,19 @@ document.addEventListener("DOMContentLoaded", () => {
     const shareButtonsHtml = `
       <div class="share-buttons">
         <span class="share-label">Share:</span>
-        <button class="share-btn share-facebook" data-activity="${name}" title="Share on Facebook">
+        <button class="share-btn share-facebook" data-activity="${name}" title="Share on Facebook" aria-label="Share ${name} on Facebook">
           <span>📘</span>
         </button>
-        <button class="share-btn share-twitter" data-activity="${name}" title="Share on Twitter">
+        <button class="share-btn share-twitter" data-activity="${name}" title="Share on Twitter" aria-label="Share ${name} on Twitter">
           <span>🐦</span>
         </button>
-        <button class="share-btn share-whatsapp" data-activity="${name}" title="Share on WhatsApp">
+        <button class="share-btn share-whatsapp" data-activity="${name}" title="Share on WhatsApp" aria-label="Share ${name} on WhatsApp">
           <span>💬</span>
         </button>
-        <button class="share-btn share-email" data-activity="${name}" title="Share via Email">
+        <button class="share-btn share-email" data-activity="${name}" title="Share via Email" aria-label="Share ${name} via Email">
           <span>✉️</span>
         </button>
-        <button class="share-btn share-copy" data-activity="${name}" title="Copy Link">
+        <button class="share-btn share-copy" data-activity="${name}" title="Copy Link" aria-label="Copy link to ${name}">
           <span>🔗</span>
         </button>
       </div>
