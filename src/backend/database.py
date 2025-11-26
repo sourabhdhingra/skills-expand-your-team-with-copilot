@@ -163,6 +163,17 @@ initial_activities = {
         },
         "max_participants": 16,
         "participants": ["william@mergington.edu", "jacob@mergington.edu"]
+    },
+    "Manga Maniacs": {
+        "description": "Dive into epic adventures, intense battles, and heartfelt friendships! Read and discuss iconic manga series from shonen action to slice-of-life stories. Whether you're team Naruto or team One Piece, all manga fans are welcome!",
+        "schedule": "Tuesdays, 5:00 PM - 6:00 PM",
+        "schedule_details": {
+            "days": ["Tuesday"],
+            "start_time": "17:00",
+            "end_time": "18:00"
+        },
+        "max_participants": 25,
+        "participants": []
     }
 }
 
