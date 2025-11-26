@@ -728,10 +728,14 @@ footer {
 }
 
 /* Smooth transition for theme changes */
-body {
-  transition: background-color 0.3s ease, color 0.3s ease;
-}
-
-* {
+body,
+header,
+section,
+.activity-card,
+.sidebar-filters,
+.modal-content,
+button,
+input,
+textarea {
   transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
 }
